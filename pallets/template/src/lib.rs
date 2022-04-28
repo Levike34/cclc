@@ -30,6 +30,10 @@ pub mod pallet {
     #[pallet::generate_deposit(pub(super) fn deposit_event)]
     pub enum Event<T: Config> {
         /// Event emitted when a proof has been claimed. [who, claim]
+        StartPlan(T::AccountId, BoundedVec<u8, T::MaxBytesInHash>),
+        /// Event emitted when a claim is revoked by the owner. [who, claim]
+        EndPlan(T::AccountId, BoundedVec<u8, T::MaxBytesInHash>),
+        /// Event emitted when a proof has been claimed. [who, claim]
         ClaimCreated(T::AccountId, BoundedVec<u8, T::MaxBytesInHash>),
         /// Event emitted when a claim is revoked by the owner. [who, claim]
         ClaimRevoked(T::AccountId, BoundedVec<u8, T::MaxBytesInHash>),
@@ -92,12 +96,9 @@ pub mod pallet {
             origin: OriginFor<T>,
             proof: BoundedVec<u8, T::MaxBytesInHash>,
         ) -> DispatchResult {
-            // Check that the extrinsic was signed and get the signer.
-            // This function will return an error if the extrinsic is not signed.
-            // https://docs.substrate.io/v3/runtime/origins
+        
             let sender = ensure_signed(origin)?;
 
-            // Verify that the specified proof has been claimed.
             ensure!(Proofs::<T>::contains_key(&proof), Error::<T>::NoSuchProof);
 
             // Get owner of the claim.

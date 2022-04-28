@@ -12,8 +12,8 @@ pub mod pallet {
     use frame_support::traits::{UnixTime, Currency};
 
 
-   pub type NegativeImbalanceOf<T> = <<T as Config>::Vrmeta as Currency<<T as frame_system::Config>::AccountId>>::NegativeImbalance;
-   pub type BalanceOf<T> = <<T as Config>::Vrmeta as Currency<<T as frame_system::Config>::AccountId>>::Balance;
+   pub type NegativeImbalanceOf<T> = <<T as Config>::Cclc as Currency<<T as frame_system::Config>::AccountId>>::NegativeImbalance;
+   pub type BalanceOf<T> = <<T as Config>::Cclc as Currency<<T as frame_system::Config>::AccountId>>::Balance;
 
    impl<T: Config> Pallet<T> {
     pub fn switch(i: u32) -> BalanceOf<T> {
@@ -29,7 +29,7 @@ pub mod pallet {
         // The type used for timestamp math operations.
         type TimeProvider: UnixTime;
         // Balances
-        type Vrmeta: Currency<Self::AccountId>;    
+        type Cclc: Currency<Self::AccountId>;    
          
 	}
 
@@ -110,7 +110,7 @@ pub mod pallet {
             let divisor: BalanceOf<T> = Self::switch(3_600);
 
             let amount_to_give: BalanceOf<T> = (multiplier / divisor) * coin_per_hour;       
-            let _tx = T::Vrmeta::deposit_into_existing(&sender, amount_to_give);
+            let _tx = T::Cclc::deposit_into_existing(&sender, amount_to_give);
 
 
             Players::<T>::remove(&sender);

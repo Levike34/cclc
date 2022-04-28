@@ -15,8 +15,8 @@ pub mod pallet {
     use sp_io::hashing::*;
 
 
-   pub type NegativeImbalanceOf<T> = <<T as Config>::Vrmeta as Currency<<T as frame_system::Config>::AccountId>>::NegativeImbalance;
-   pub type Balance<T> = <<T as Config>::Vrmeta as Currency<<T as frame_system::Config>::AccountId>>::Balance;
+   pub type NegativeImbalanceOf<T> = <<T as Config>::Cclc as Currency<<T as frame_system::Config>::AccountId>>::NegativeImbalance;
+   pub type Balance<T> = <<T as Config>::Cclc as Currency<<T as frame_system::Config>::AccountId>>::Balance;
 
    impl<T: Config> Pallet<T> {
     pub fn switch(i: u32) -> Balance<T> {
@@ -38,7 +38,7 @@ pub mod pallet {
         // The type used for timestamp math operations.
         type TimeProvider: UnixTime;
         // Balances
-        type Vrmeta: Currency<Self::AccountId>;   
+        type Cclc: Currency<Self::AccountId>;   
          
 	}
 
@@ -104,7 +104,7 @@ pub mod pallet {
             ensure!(time_expire[1] <= Self::switch(current_time as u32), Error::<T>::ClaimExpired);
 
             let amount_to_give = time_expire[0];
-            T::Vrmeta::deposit_into_existing(&sender, amount_to_give);
+            T::Cclc::deposit_into_existing(&sender, amount_to_give);
 
             Self::deposit_event(Event::ClaimFiled(hash, sender, current_time as u32, amount_to_give));
             Claims::<T>::remove(&hash);
@@ -127,8 +127,6 @@ pub mod pallet {
 
             let amount_to_give: Balance<T> = amount;       
             Claims::<T>::insert(&hash, [amount_to_give, expiration_time]);
-
-           //let _tx = T::Vrmeta::deposit_into_existing(&sender, amount_to_give);
 
 
             Self::deposit_event(Event::ClaimReceived(hash, [amount_to_give, expiration_time]));

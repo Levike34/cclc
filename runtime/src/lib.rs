@@ -372,13 +372,13 @@ impl pallet_contracts::Config for Runtime {
 impl pallet_timestake::Config for Runtime {
 	type Event = Event;
     type TimeProvider = pallet_timestamp::Pallet<Runtime>;
-	type Vrmeta = Balances;
+	type Cclc = Balances;
 }
 
 impl pallet_chainless_mint_iou::Config for Runtime {
 	type Event = Event;
     type TimeProvider = pallet_timestamp::Pallet<Runtime>;
-	type Vrmeta = Balances;
+	type Cclc = Balances;
 }
 
 // Create the runtime by composing the FRAME pallets that were previously configured.
