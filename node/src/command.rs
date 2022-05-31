@@ -3,13 +3,13 @@ use crate::{
 	cli::{Cli, Subcommand},
 	service,
 };
-use contracts_node_runtime::Block;
+use node_template_runtime::Block;
 use sc_cli::{ChainSpec, RuntimeVersion, SubstrateCli};
 use sc_service::PartialComponents;
 
 impl SubstrateCli for Cli {
 	fn impl_name() -> String {
-		"Substrate Contracts Node".into()
+		"Substrate Node".into()
 	}
 
 	fn impl_version() -> String {
@@ -25,24 +25,25 @@ impl SubstrateCli for Cli {
 	}
 
 	fn support_url() -> String {
-		"https://github.com/paritytech/canvas-node/issues/new".into()
+		"support.anonymous.an".into()
 	}
 
 	fn copyright_start_year() -> i32 {
-		2021
+		2017
 	}
 
 	fn load_spec(&self, id: &str) -> Result<Box<dyn sc_service::ChainSpec>, String> {
 		Ok(match id {
 			"dev" => Box::new(chain_spec::development_config()?),
 			"" | "local" => Box::new(chain_spec::local_testnet_config()?),
+			"staging" => Box::new(chain_spec::staging_network_config()),
 			path =>
 				Box::new(chain_spec::ChainSpec::from_json_file(std::path::PathBuf::from(path))?),
 		})
 	}
 
 	fn native_runtime_version(_: &Box<dyn ChainSpec>) -> &'static RuntimeVersion {
-		&contracts_node_runtime::VERSION
+		&node_template_runtime::VERSION
 	}
 }
 
